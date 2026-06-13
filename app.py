@@ -7,7 +7,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Configuration
-API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
+API_URL = "http://127.0.0.1:8000"
+if "API_URL" in st.secrets:
+    API_URL = st.secrets["API_URL"]
+else:
+    API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
+
 
 # Page Config
 st.set_page_config(
@@ -168,10 +173,11 @@ if not threads:
         t3 = create_thread("Thread 3: Summary of all Threads", is_summary=True)
         
         # Load sample conversations so the memory has initial content
+        initial_key = st.secrets.get("GEMINI_API_KEY") or st.secrets.get("OPENAI_API_KEY") or os.getenv("GEMINI_API_KEY") or os.getenv("OPENAI_API_KEY")
         if t1:
-            send_message(t1["id"], "I am planning a trip to Japan next winter. What are some top places to visit?", os.getenv("GEMINI_API_KEY") or os.getenv("OPENAI_API_KEY"), "gemini")
+            send_message(t1["id"], "I am planning a trip to Japan next winter. What are some top places to visit?", initial_key, "gemini")
         if t2:
-            send_message(t2["id"], "I am writing a Python program using FastAPI. What are the best practices for structuring API endpoints?", os.getenv("GEMINI_API_KEY") or os.getenv("OPENAI_API_KEY"), "gemini")
+            send_message(t2["id"], "I am writing a Python program using FastAPI. What are the best practices for structuring API endpoints?", initial_key, "gemini")
             
         threads = fetch_threads()
         if threads:
@@ -205,12 +211,12 @@ with st.sidebar:
         key="provider_select"
     )
     
-    # Pre-populate key from environment variables if present
+    # Pre-populate key from secrets or environment variables if present
     default_key = ""
     if st.session_state.provider == "gemini":
-        default_key = os.getenv("GEMINI_API_KEY", "")
+        default_key = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY", "")
     elif st.session_state.provider == "openai":
-        default_key = os.getenv("OPENAI_API_KEY", "")
+        default_key = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY", "")
         
     st.session_state.api_key = st.text_input(
         f"{st.session_state.provider.capitalize()} API Key",
