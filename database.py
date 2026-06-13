@@ -7,8 +7,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Use SQLite by default if DATABASE_URL is not set
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./chat_app.db")
+# Use SQLite in /tmp folder on Vercel to bypass read-only filesystem restrictions
+if os.getenv("VERCEL"):
+    DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:////tmp/chat_app.db")
+else:
+    DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./chat_app.db")
 
 engine = create_engine(
     DATABASE_URL, 
