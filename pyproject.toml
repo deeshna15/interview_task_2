@@ -7,7 +7,6 @@ dependencies = [
     "uvicorn",
     "sqlalchemy",
     "pydantic",
-    "streamlit",
     "requests",
     "python-dotenv",
     "google-generativeai",
