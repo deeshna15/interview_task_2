@@ -7,3 +7,4 @@ requests
 python-dotenv
 google-generativeai
 openai
+psycopg2-binary

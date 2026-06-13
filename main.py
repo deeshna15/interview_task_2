@@ -23,6 +23,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def read_root():
+    return {"status": "healthy", "message": "Universal Memory Chat API is running"}
+
 # Pydantic Schemas
 class ThreadCreate(BaseModel):
     title: str
