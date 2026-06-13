@@ -1,0 +1,19 @@
+[project]
+name = "universal-memory-chat"
+version = "0.1.0"
+description = "FastAPI backend with Universal Memory"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "sqlalchemy",
+    "pydantic",
+    "streamlit",
+    "requests",
+    "python-dotenv",
+    "google-generativeai",
+    "openai",
+    "psycopg2-binary"
+]
+
+[tool.vercel]
+entrypoint = "main.py"
